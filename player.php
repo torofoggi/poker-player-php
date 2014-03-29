@@ -7,7 +7,7 @@ class Player
     public function betRequest(GameState $gameState)
     {
         if($this->hasHolePair($gameState)) {
-            return $gameState->getMinimumToRaise() * 5;
+            return max($gameState->getMinimumToRaise() * 10 * $gameState->getStackDependentmultiplyer(), $gameState->getMinimumToRaise());
         } elseif ($this->isBothHoleCardsAbove9($gameState)) {
             return $gameState->getExactToCheck();
         }

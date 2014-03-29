@@ -2,6 +2,8 @@
 class GameState {
     private $state;
     
+    const BASESTACK = 1000;
+    
     public function __construct($jsonState) {
         $this->parseState(json_decode($jsonState, true));
     }
@@ -29,6 +31,17 @@ class GameState {
     
     public function getExactToCheck() {
         return ($this->state["current_buy_in"] - $this->getOurPlayerStatus()["bet"]);
+    }
+    
+    public function getStack() {
+        return $this->getOurPlayerStatus()["stack"];
+    }
+    
+    public function getStackDependentmultiplyer() {
+        if($this->getStack() > (self::BASESTACK/2)) {
+            return 1;
+        }
+        return 0.5;
     }
     
     public function getHoleCard($index) {
