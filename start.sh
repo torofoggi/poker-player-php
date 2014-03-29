@@ -3,6 +3,6 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $DIR
 
-php5 -S 'localhost:8000' & 
+php -S 'localhost:8123' & 
 
 echo $! > php_server.pid
