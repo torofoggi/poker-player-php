@@ -6,7 +6,7 @@ class Player
 
     public function betRequest($game_state)
     {
-        return 0;
+        return $game_state["minimum_raise"];
     }
 
     public function showdown($game_state)
