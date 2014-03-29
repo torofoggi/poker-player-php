@@ -7,12 +7,7 @@ class GameState {
     }
     
     public function getMinimumToRaise() {
-        return getExactToCheck() + $this->state["minimum_raise"];
-    }
-    
-    public function hasHolePair() {
-        $holeCards = $this->getOurHoleCards();
-        return ($holeCards[0]["rank"] == $holeCards[1]["rank"]);
+        return $this->getExactToCheck() + $this->state["minimum_raise"];
     }
     
     private function getOurPlayerId() {
@@ -29,5 +24,9 @@ class GameState {
     
     public function getExactToCheck() {
         return ($this->state["current_buy_in"] - $this->getOurPlayerStatus()["bet"]);
+    }
+    
+    public function getHoleCard($index) {
+        return $this->getOurHoleCards()[$index];
     }
 }
