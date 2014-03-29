@@ -6,9 +6,10 @@ class Player
 
     public function betRequest(GameState $gameState)
     {
-        if($this->hasHolePair($gameState)) {
+        $ranking = new Ranking($gameState->getAllCards());
+        if($ranking->hasHolePair()) {
             return max($gameState->getMinimumToRaise() * 10 * $gameState->getStackDependentmultiplyer(), $gameState->getMinimumToRaise());
-        } elseif ($this->isBothHoleCardsAbove9($gameState)) {
+        } elseif ($ranking->isBothHoleCardsAbove9()) {
             return $gameState->getExactToCheck();
         }
         
@@ -17,13 +18,5 @@ class Player
 
     public function showdown($game_state)
     {
-    }
-    
-     private function hasHolePair($gameState) {
-        return ($gameState->getHoleCard(0)["rank"] == $gameState->getHoleCard(1)["rank"]);
-    }
-    
-    private function isBothHoleCardsAbove9($gameState) {
-        return ($gameState->getHoleCard(0)["rank"] >= 10 && $gameState->getHoleCard(1)["rank"] >= 10);
     }
 }

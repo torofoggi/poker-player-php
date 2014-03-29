@@ -46,6 +46,10 @@ class GameState {
     
     public function getHoleCard($index) {
         $card = $this->getOurHoleCards()[$index];
+        return $this->addValueAbove9InCards($card);
+    }
+    
+    private function addValueAbove9InCards($card) {
         switch ($card["rank"]) {
             case "J":
                 $rank = 11;
@@ -62,7 +66,18 @@ class GameState {
             default:
                 $rank = $card["rank"];
         }
-        $card["rank"] = $rank; 
+        $card["value"] = $rank; 
         return $card;
+    }
+    
+    public function getAllCards() {
+        return array(
+            "hole" => array(
+                $this->getHoleCard(0),
+                $this->getHoleCard(1),
+            ),
+            "community" => array(
+            ),
+        );
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 require_once('GameState.php');
+require_once('Ranking.php');
 require_once('player.php');
 
 $player = new Player();
