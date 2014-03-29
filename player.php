@@ -4,9 +4,9 @@ class Player
 {
     const VERSION = "Default PHP folding player";
 
-    public function betRequest($game_state)
+    public function betRequest(GameState $gameState)
     {
-        return $game_state["minimum_raise"];
+        return $gameState->getMinimumToRaise();
     }
 
     public function showdown($game_state)
