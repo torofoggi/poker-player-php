@@ -3,7 +3,11 @@ class GameState {
     private $state;
     
     public function __construct($jsonState) {
-        $this->state = json_decode($jsonState, true);
+        $this->parseState(json_decode($jsonState, true));
+    }
+    
+    private function parseState($state) {
+        $this->state = $state;
     }
     
     public function getMinimumToRaise() {
@@ -16,6 +20,7 @@ class GameState {
     
     private function getOurHoleCards() {
         return $this->getOurPlayerStatus()["hole_cards"];
+        
     }
     
     private function getOurPlayerStatus() {
@@ -27,6 +32,24 @@ class GameState {
     }
     
     public function getHoleCard($index) {
-        return $this->getOurHoleCards()[$index];
+        $card = $this->getOurHoleCards()[$index];
+        switch ($card["rank"]) {
+            case "J":
+                $rank = 11;
+                break;
+            case "Q":
+                $rank = 12;
+                break;
+            case "K":
+                $rank = 13;
+                break;
+            case "A":
+                $rank = 14;
+                break;
+            default:
+                $rank = $card["rank"];
+        }
+        $card["rank"] = $rank; 
+        return $card;
     }
 }
