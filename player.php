@@ -2,7 +2,7 @@
 
 class Player
 {
-    const VERSION = "Default PHP folding player";
+    const VERSION = "Folder Bot FTW";
 
     public function betRequest(GameState $gameState)
     {
