@@ -6,7 +6,11 @@ class Player
 
     public function betRequest(GameState $gameState)
     {
-        return $gameState->getMinimumToRaise();
+        if($gameState->hasHolePair()) {
+            return $gameState->getMinimumToRaise() * 5;
+        } 
+        
+        return $gameState->getExactToCheck();
     }
 
     public function showdown($game_state)
