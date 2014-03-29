@@ -76,8 +76,19 @@ class GameState {
                 $this->getHoleCard(0),
                 $this->getHoleCard(1),
             ),
-            "community" => array(
-            ),
+            "community" => $this->getCommunityCards(),
         );
+    }
+    
+    private function getCommunityCards() {
+        $communityCards = $this->state["community_cards"];
+        foreach ($communityCards as $key => $value) {
+            $communityCards[$key] = $this->addValueAbove9InCards($value);
+        }
+        return $communityCards;
+    }
+    
+    public function getBigBlind() {
+        return $this->state["small_blind"] * 2;
     }
 }

@@ -6,14 +6,17 @@ class Player
 
     public function betRequest(GameState $gameState)
     {
-        $ranking = new Ranking($gameState->getAllCards());
-        if($ranking->hasHolePair()) {
+        $rankingForAllCards = new Ranking($gameState->getAllCards());
+        $rankingForCommunityCards = new Ranking(array("community" => $gameState->getAllCards()["community"]));
+        if(count($gameState->getAllCards()["community"]) && $rankingForCommunityCards->getRank() >= $rankingForAllCards->getRank()) {
+            return 0;
+        } elseif($rankingForAllCards->getRank() >= 1) {
             return max($gameState->getMinimumToRaise() * 10 * $gameState->getStackDependentmultiplyer(), $gameState->getMinimumToRaise());
-        } elseif ($ranking->isBothHoleCardsAbove9()) {
+        } elseif ($rankingForAllCards->isBothHoleCardsAbove9()) {
             return $gameState->getExactToCheck();
-        }
+        } 
         
-        return 0;
+        return max($gameState->getExactToCheck(), 2 * $gameState->getBigBlind());
     }
 
     public function showdown($game_state)

@@ -1,37 +1,18 @@
 <?php
 
-/**
-    array(
-        'cards' => json_encode(array(
-            array(
-                "suit" => "Diamonds",
-                "rank" => "2"
-            ),
-            array(
-                "suit" => "Diamonds",
-                "rank" => "10",
-                "value" => 14
-            ),
-            array(
-                "suit" => "Diamonds",
-                "rank" => "10"
-            ),
-            array(
-                "suit" => "Diamonds",
-                "rank" => "10"
-            ),
-            array(
-                "suit" => "Diamonds",
-                "rank" => "10"
-            )
-        ))
-    )
-*/
+
 
 class Ranklib {
-    protected static $server = "http://192.168.2.117:2048";
+    protected static $server = "http://localhost:2048";
 
-    public function getRank($cards) {
+    private $rankArray;
+    
+    public function request($cards) {
+        if(count($cards) < 5) {
+            $this->rankArray = array("rank" => $this->rankCardsUnder5($cards)); 
+            return ;
+        } 
+        
         $postData = http_build_query(array('cards' => json_encode($cards)));
 
         $contextOptions = array('http' =>
@@ -44,7 +25,45 @@ class Ranklib {
 
         $context  = stream_context_create($contextOptions);
 
-        return json_decode(file_get_contents(self::$server, false, $context));
+        $this->rankArray = json_decode(file_get_contents(self::$server, false, $context), true);
     }
+    
+    public function getRank() {
+       return $this->rankArray["rank"];
+    }
+    
+    private function rankCardsUnder5($cards) {
+        $pairRank = $this->calculatePairRank($cards);
+        if($pairRank == 1) {
+            return 1;
+        } elseif ($pairRank == 2) {
+            return 2;
+        } elseif ($pairRank == 3) {
+            return 3;
+        } elseif ($pairRank > 3) {
+            return 7;
+        }
+        return 0;
+    }
+    
+    private function isPair($card1, $card2) {
+        return ($card1["value"] == $card2["value"]);
+    }
+    
+    private function calculatePairRank($cards) {
+        $counter = 0;
+        for ($i = 0; $i < count($cards); $i++) {
+            for ($j = $i; $j < count($cards); $j++) {
+                if($i != $j) {
+                    if($this->isPair($cards[$i], $cards[$j])) {
+                        $counter++;
+                    }
+                }
+            }   
+        }
+        
+        return $counter;
+    }
+    
 }
 
